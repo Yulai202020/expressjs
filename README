@@ -1,0 +1,10 @@
+install:
+    npm install express
+    npm install dotenv
+    npm install pg-promise
+    npm install cors
+
+create file .env and write:
+    DB_LINK = 'postgres://postgres:password123@localhost:5432/test'
+
+for start server: node index.js
