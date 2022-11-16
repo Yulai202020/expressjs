@@ -1,0 +1,5 @@
+*.env
+.env
+pug
+node_modules
+.gitignore

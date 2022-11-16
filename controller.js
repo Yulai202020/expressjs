@@ -5,22 +5,30 @@ require('dotenv').config()
 
 const db = pgp(process.env.DB_LINK);
 
-function index(req,res){
-    if (req.subject !== undefined && req.text !== undefined) {
-        console.log(req.subject);
-        console.log(req.note);
-        db.query(`INSERT INTO note(subject,text) VALUES ( ${req.subject} , ${req.note} )`)
-    }
+
+function index_post(req,res){
+    console.log(req.subject);
+    console.log(req.note);
+    db.query(`INSERT INTO note (subject, text) VALUES ('${req.subject}' , '${req.note}')`)
+    res.redirect("/")
+}
+
+function index(req, res){
     var all_notes = db.query(`SELECT * FROM note`);
     if (all_notes === undefined)
         all_notes = [['','']]
     res.sendFile(path.join(__dirname+"/templates/index.html"),{all_notes : all_notes});
 }
 
-function createNote(req,res){
+function getData(req, res){
+    const data = [];
+    res.send(data);
+}
+
+function createNote(req, res){
     res.sendFile(path.join(__dirname+"/templates/create.html"));
 }
 
-const ctrl = { index, createNote }
+const ctrl = { index, index_post, createNote, getData }
 
 module.exports = ctrl;
