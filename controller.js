@@ -1,34 +1,29 @@
 const pgp = require('pg-promise')();
-const path = require("path");
-require('dotenv').config()
-
+require('dotenv').config();
 
 const db = pgp(process.env.DB_LINK);
-
 
 function index_post(req,res){
     console.log(req.subject);
     console.log(req.note);
-    db.query(`INSERT INTO note (subject, text) VALUES ('${req.subject}' , '${req.note}')`)
-    res.redirect("/")
-}
-
-function index(req, res){
-    var all_notes = db.query(`SELECT * FROM note`);
-    if (all_notes === undefined)
-        all_notes = [['','']]
-    res.sendFile(path.join(__dirname+"/templates/index.html"),{all_notes : all_notes});
-}
-
-function getData(req, res){
-    const data = [];
-    res.send(data);
+    db.query(`INSERT INTO note (subject, text) VALUES ('${req.subject}' , '${req.note}')`);
+    res.redirect("/");
 }
 
 function createNote(req, res){
-    res.sendFile(path.join(__dirname+"/templates/create.html"));
+    res.render("create.html");
 }
 
-const ctrl = { index, index_post, createNote, getData }
+function index(req, res){
+    res.render("index.html");
+}
+
+function getData(req, res){
+    var all_notes = db.query(`SELECT * FROM note`);
+    const data = [all_notes];
+    res.send(data);
+}
+
+const ctrl = { index, index_post, createNote, getData };
 
 module.exports = ctrl;
